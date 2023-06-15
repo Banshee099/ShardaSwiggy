@@ -1,19 +1,72 @@
 package org.example;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
-public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.println("Hello and welcome!");
+import java.io.BufferedReader;
+import org.example.Dish;
+import java.io.IOException;
+import java.util.*;
+import java.util.Scanner;
+import java.io.FileReader;
+import org.example.Restro;
+class Parse{
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
-
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+    Dish[] dishes = new Dish[10];
+    Restro [] restaurants = new Restro[10];
+    void parse_dishes(){
+        try {
+            FileReader fr = new FileReader("C:\\Users\\manas\\IdeaProjects\\ShardaSwiggy\\Data\\Dish.csv");
+            BufferedReader br = new BufferedReader(fr);
+            String newline;
+            String[] arr;
+            int i = 0;
+            while ((newline = br.readLine()) != null) {
+                arr = newline.split(",");
+                Dish d = new Dish(arr[0],arr[1],arr[2],arr[3]);
+                dishes[i] = d;
+                i++;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
+
+    void parse_restaurant(){
+        try{
+            FileReader f = new FileReader("C:\\Users\\manas\\IdeaProjects\\ShardaSwiggy\\Data\\Kitchen.csv");
+            BufferedReader br = new BufferedReader(f);
+            String newline;
+            String[] arr;
+            int i = 0;
+            while ((newline = br.readLine()) != null) {
+                arr = newline.split(",");
+                Restro d = new Restro(arr[0],arr[1],arr[2]);
+                restaurants[i] = d;
+                i++;
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        System.out.println("Welcome to Sharda Swiggy");
+        Parse p = new Parse();
+        p.parse_dishes();
+        p.parse_restaurant();
+        for (Restro j : p.restaurants) {
+            if(j!=null){
+            System.out.println(j.restro_name+" "+j.type);
+            for (Dish i : p.dishes) {
+                if (i != null) {
+                    if (Objects.equals(j.id, i.id)) {
+                        System.out.println(i.dish_name + " " + i.price + " " + i.type);
+                    }
+                }
+            }
+            }
+        }
+    }
+
 }
